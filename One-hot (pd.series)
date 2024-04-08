@@ -1,0 +1,20 @@
+import pandas as pd
+
+# Генерируем исходный DataFrame
+import random
+lst = ['robot'] * 10
+lst += ['human'] * 10
+random.shuffle(lst)
+data = pd.DataFrame({'whoAmI': lst})
+
+# One-hot кодирование
+one_hot_encoded = pd.DataFrame.from_records(
+    data['whoAmI'].map(
+        lambda x: pd.Series([1 if x == label else 0 for label in data['whoAmI'].unique()], index=data['whoAmI'].unique())
+    )
+)
+
+# Присоединяем one-hot кодированные столбцы к исходному DataFrame
+data = pd.concat([data, one_hot_encoded], axis=1)
+
+print(data)
